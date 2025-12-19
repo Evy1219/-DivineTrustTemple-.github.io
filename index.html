@@ -81,6 +81,7 @@
   font-family: Arial, sans-serif;
   background-color: #0a0a0a;
   color: #fff;
+  position: relative;
 }
 #mainContent.show {
   display: flex;
@@ -99,8 +100,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* For new layout, we'll override this with internal divs */
 }
+
+/* Top box container for "Who Am I?" */
 #topBoxContainer {
   width: 100%;
   padding: 10px 0;
@@ -113,8 +115,35 @@
   border-radius: 8px;
   border: 2px solid #006400;
   text-align: center;
-  background-color: transparent;
 }
+#topBoxContainer .title-box h3 {
+  margin: 0;
+}
+
+/* Box below "Who Am I?" for input or text */
+#inputBoxContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  background-color: #1a1a1a;
+}
+#inputBox {
+  max-width: 800px;
+  width: 90%;
+  background-color: #222;
+  border-radius: 8px;
+  border: 2px solid #006400;
+  padding: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1em;
+  min-height: 80px; /* Adjust height as needed */
+  outline: none;
+  color: #fff;
+  resize: vertical;
+}
+
+/* Centered middle boxes area */
 #middleBoxesContainer {
   flex: 1;
   display: flex;
@@ -162,10 +191,10 @@
   padding: 15px;
   text-align: center;
 }
-#blogBackBtn {
+#backBtn {
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
   padding: 10px 15px;
   background: #0f0;
   border: none;
@@ -174,37 +203,6 @@
   font-size: 0.8em;
   cursor: pointer;
   z-index: 1000;
-}
-
-/* Trust Temple info page styles (if needed later) */
-#trustPage {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
-  background: #222;
-  border: 4px solid #0f0;
-  border-radius: 8px;
-  height: 100vh;
-  overflow: auto;
-  position: relative;
-}
-#trustPage.show {
-  display: flex;
-}
-#trustBackBtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 10px 15px;
-  background: #0f0;
-  border: none;
-  border-radius: 50%;
-  font-family: 'Press Start 2P';
-  font-size: 0.8em;
-  cursor: pointer;
 }
 </style>
 </head>
@@ -222,14 +220,21 @@
 
 <!-- Main page -->
 <div id="mainContent">
+  <!-- Back button -->
+  <button id="backBtn">Back</button>
   <div id="header">
     <h1>Trust Temple</h1>
   </div>
   <main id="content">
 
-    <!-- Top "Who Am I?" box stretched across -->
+    <!-- Top "Who Am I?" box -->
     <div id="topBoxContainer">
       <div class="title-box"><h3>Who Am I ?</h3></div>
+    </div>
+
+    <!-- Box for input or text underneath "Who Am I?" -->
+    <div id="inputBoxContainer">
+      <textarea id="inputBox" placeholder="Type here..."></textarea>
     </div>
 
     <!-- Centered middle boxes -->
@@ -294,6 +299,14 @@
         document.getElementById('mainContent').classList.add('show');
       }, 50);
     }, 500);
+  };
+  // Back button resets to intro
+  document.getElementById('backBtn').onclick = () => {
+    // Show intro again
+    document.getElementById('introContainer').style.display = 'flex';
+    document.getElementById('introContainer').style.opacity = 1;
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('mainContent').classList.remove('show');
   };
 </script>
 
