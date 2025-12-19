@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>TrustTemple - Welcome to the Ultimate Trust Platform</title>
+<title>TrustTemple - Unique 64-bit Temple Loader</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 <style>
   body {
     margin: 0; padding: 0;
     font-family: 'Press Start 2P', cursive;
-    background-color: #000;
+    background: #000;
     color: #00FF00;
     height: 100vh;
     overflow: hidden;
@@ -16,138 +16,117 @@
     flex-direction: column;
   }
 
-  /* Background of falling 1s and 0s */
+  /* Background static noise for vibe */
   #background {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    position: fixed; top:0; left:0; right:0; bottom:0;
     z-index: -1;
-  }
-  @keyframes fall {
-    0% {transform: translateY(0);}
-    100% {transform: translateY(100vh);}
-  }
-  .digit {
-    position: absolute;
-    top: -10px;
-    font-size: 8px;
-    color: #222;
-    animation: fall 15s linear infinite;
-  }
-
-  /* Loading overlay */
-  #loading {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
     background: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
   }
 
-  #templeContainer {
-    text-align: center;
-    position: relative;
+  /* Generate random pixel noise background for effect */
+  @keyframes static {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+  }
+  #staticNoise {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0,255,0,0.05) 1px,
+      rgba(0,255,0,0.05) 2px
+    );
+    animation: static 1s infinite;
+    z-index: -2;
   }
 
-  /* Smaller "Temple" build-up text */
-  #templeText {
-    font-size: 2em;
-  }
-  .letter {
-    display: inline-block;
-    opacity: 0;
-    font-size: 2em;
-    margin: 0 2px;
-    animation: appear 1s forwards;
-  }
-  /* Delay each letter for slower build-up */
-  .letter:nth-child(1) { animation-delay: 0s; }
-  .letter:nth-child(2) { animation-delay: 0.3s; }
-  .letter:nth-child(3) { animation-delay: 0.6s; }
-  .letter:nth-child(4) { animation-delay: 0.9s; }
-  .letter:nth-child(5) { animation-delay: 1.2s; }
-  .letter:nth-child(6) { animation-delay: 1.5s; }
-
-@keyframes appear {
-  to { opacity: 1; }
+  /* Loader container */
+#loader {
+  width: 80%; max-width: 600px; margin: auto; margin-top: 50px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1em;
+  color: #00FF00;
+  position: relative;
+  height: 70vh;
 }
 
-/* Temple shape (initially a triangle) */
-#templeShape {
-  width: 0; height: 0;
-  border-left: 40px solid transparent;
-  border-right: 40px solid transparent;
-  border-bottom: 50px solid #00FF00;
-  margin: 0 auto;
+/* The temple grid build (64-bit style) */
+#templeGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 20px);
+  grid-template-rows: repeat(8, 20px);
+  gap: 2px;
+  margin-bottom: 20px;
+}
+
+/* blocks in the grid */
+.block {
+  width: 20px;
+  height: 20px;
+  background-color: #222;
+  border-radius: 2px;
   opacity: 0;
-  animation: rise 1s forwards;
-  animation-delay: 4s;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
 }
 
-/* Eye shape (after click) - animated via class toggle */
-#eyeShape {
-  width: 0; height: 0;
-  border-radius: 50%;
-  background-color: #00FF00;
-  margin: 0 auto;
-  opacity: 0;
-  transition: all 2s ease-in-out;
+/* Build animation */
+@keyframes buildBlock {
+  0% { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-/* Base for the eye (pupil) */
-#eyePupil {
-  width: 40px; height: 40px;
-  background: #000;
-  border-radius: 50%;
-  position: absolute;
-  top: calc(50% - 20px);
-  left: calc(50% - 20px);
-  opacity: 0;
-  transition: opacity 1s;
-}
-
-/* Animate into eye shape */
-#eyeActive {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  border: 4px solid #00FF00;
-  background-color: transparent;
+/* Show blocks as they build */
+.showBlock {
   opacity: 1;
-  margin-top: 20px;
+  transform: scale(1);
 }
 
-/* "Enter" button */
+/* The "Enter" button */
 #enterBtn {
   display: none;
   margin-top: 20px;
   padding: 15px 30px;
   font-family: 'Press Start 2P', cursive;
-  font-size: 1.2em;
+  font-size: 1em;
   background: #00FF00;
   color: #000;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 0 10px #00FF00;
   cursor: pointer;
+  z-index: 10;
 }
 
-/* Main content */
-#mainContent {
+/* Main page styles */
+#mainPage {
   display: none;
-  position: relative;
-  max-width: 900px;
-  margin: 40px auto;
+  flex: 1;
   padding: 20px;
-  background-color: #222;
+  max-width: 1000px;
+  margin: auto;
+  background-color: #111;
   border: 4px solid #00FF00;
-  border-radius: 8px;
-  text-align: center;
+  border-radius: 10px;
+  position: relative;
 }
 
-/* "X" back button top-left of main box */
-#backButton {
+/* Info boxes in main page */
+.infoBox {
+  background: #222;
+  border: 2px solid #00FF00;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+/* "X" close button on main page top-left */
+#closeBtn {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -158,119 +137,78 @@
   font-size: 1em;
   border-radius: 50%;
   box-shadow: 0 0 10px #00FF00;
+  cursor: pointer;
   display: none;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  z-index: 10;
 }
 </style>
 </head>
 <body>
 
-<!-- Background of falling 1s and 0s -->
-<div id="background"></div>
+<div id="staticNoise"></div>
 
-<!-- Loading overlay -->
-<div id="loading">
-  <div id="templeContainer">
-    <div id="templeText">
-      <span class="letter">T</span>
-      <span class="letter">e</span>
-      <span class="letter">m</span>
-      <span class="letter">p</span>
-      <span class="letter">l</span>
-      <span class="letter">e</span>
-    </div>
-    <div id="templeShape"></div>
-    <div id="eyeShape"></div>
-    <div id="eyePupil"></div>
-    <button id="enterBtn">Enter</button>
-  </div>
+<div id="loader">
+  <div id="templeGrid"></div>
+  <button id="enterBtn">Enter</button>
 </div>
 
-<!-- Main page -->
-<div id="mainContent">
-  <button id="backButton">X</button>
+<div id="mainPage">
+  <button id="closeBtn">X</button>
   <h1>TrustTemple</h1>
-  <p>Welcome to the ultimate trust platform.</p>
-  <p>Built with the spirit of simplicity and retro style.</p>
+  <div class="infoBox">Random info 1: The sky is blue.</div>
+  <div class="infoBox">Random info 2: Trust is everything.</div>
+  <div class="infoBox">Random info 3: Keep your secrets safe.</div>
+  <div class="infoBox">Random info 4: 64-bit style is cool.</div>
 </div>
 
-<!-- Scripts -->
 <script>
-  // Generate background of falling 1s and 0s
-  const background = document.getElementById('background');
-  for(let i=0; i<300; i++) {
-    const span = document.createElement('div');
-    span.className = 'digit';
-    span.style.top = Math.random() * window.innerHeight + 'px';
-    span.style.left = Math.random() * window.innerWidth + 'px';
-    span.textContent = Math.random() > 0.5 ? '1' : '0';
-    background.appendChild(span);
+  // Generate static noise dots (not necessary but adds vibe)
+  const staticDiv = document.getElementById('staticNoise');
+
+  // Generate 64 grid blocks for temple
+  const gridContainer = document.getElementById('templeGrid');
+
+  const totalBlocks = 64; // 8x8 grid
+  const blocks = [];
+
+  for (let i = 0; i < totalBlocks; i++) {
+    const block = document.createElement('div');
+    block.className = 'block';
+    gridContainer.appendChild(block);
+    blocks.push(block);
   }
 
-  const loading = document.getElementById('loading');
-  const mainContent = document.getElementById('mainContent');
-  const enterBtn = document.getElementById('enterBtn');
-  const backBtn = document.getElementById('backButton');
-  const eyeShape = document.getElementById('eyeShape');
-  const eyePupil = document.getElementById('eyePupil');
+  let buildIndex = 0;
 
-  // Show "Enter" button after intro animation
-  window.onload = () => {
-    setTimeout(() => {
+  // Animate build-up of temple blocks
+  const buildInterval = setInterval(() => {
+    if (buildIndex >= blocks.length) {
+      clearInterval(buildInterval);
+      // Show "Enter" button at the end
       document.getElementById('enterBtn').style.display = 'block';
-    }, 5000);
-  };
+      return;
+    }
 
-  // On click Enter, animate into eye
+    // Animate block
+    blocks[buildIndex].classList.add('showBlock');
+    buildIndex++;
+  }, 200); // slow build
+
+  // "Enter" button click to transition
   document.getElementById('enterBtn').onclick = () => {
-    // Remove the temple triangle
-    document.getElementById('templeShape').style.display = 'none';
-    // Animate into eye shape
-    eyeShape.style.width = '80px';
-    eyeShape.style.height = '80px';
-    eyeShape.style.borderRadius = '50%';
-    eyeShape.style.border = '4px solid #00FF00';
-    // Show the pupil
-    eyePupil.style.opacity = 1;
-    // After animation, transition to eye with a delay
-    setTimeout(() => {
-      // Animate into full eye
-      eyeShape.style.width = '150px';
-      eyeShape.style.height = '80px';
-      eyeShape.style.borderRadius = '50%';
-      eyeShape.style.border = '4px solid #00FF00';
-    }, 200);
-    // Show "Enter" button as hidden (not needed now)
-    document.getElementById('enterBtn').style.display = 'none';
-
-    // Show the "X" button
-    document.getElementById('backButton').style.display = 'flex';
-
-    // Hide the intro overlay after a delay
-    setTimeout(() => {
-      document.getElementById('loading').style.display = 'none';
-      mainContent.style.display = 'block';
-    }, 1500);
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+    document.getElementById('closeBtn').style.display = 'flex';
   };
 
-  // On "X" back button click
-  document.getElementById('backButton').onclick = () => {
-    // Show loading again
-    document.getElementById('loading').style.display = 'flex';
-    // Hide main
-    mainContent.style.display = 'none';
-    // Hide back button
-    document.getElementById('backButton').style.display = 'none';
-    // Reset eye shape
-    eyeShape.style.width = '0';
-    eyeShape.style.height = '0';
-    eyeShape.style.borderRadius = '0';
-    eyeShape.style.border = 'none';
-    eyePupil.style.opacity = 0;
+  // "X" close button in main page
+  document.getElementById('closeBtn').onclick = () => {
+    document.getElementById('loader').style.display = 'flex';
+    document.getElementById('mainPage').style.display = 'none';
+    document.getElementById('closeBtn').style.display = 'none';
   };
 </script>
-
 </body>
 </html>
