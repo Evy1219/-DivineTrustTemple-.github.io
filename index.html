@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Trust Temple - Main & Locked</title>
+<title>Trust Temple</title>
 <style>
   body {
     margin: 0; padding: 0;
@@ -41,10 +41,9 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* "Enter" button style */
-#enterBtn {
-  display: none;
-  margin-top: 30px;
+/* Buttons styling */
+#enterBtn, #creditsBtn, #backBtn {
+  margin-top: 20px;
   padding: 15px 30px;
   background: #00FF00;
   color: #000;
@@ -56,39 +55,35 @@
   opacity: 0;
   transition: opacity 1s;
 }
-#enterBtn.show {
-  display: block;
+#enterBtn.show, #creditsBtn.show, #backBtn.show {
   opacity: 1;
 }
 
-/* Stuck button */
-#stuckBtn {
-  position: fixed;
-  top: 10px; right: 10px;
-  padding: 10px 15px;
-  background: red;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  font-family: 'Press Start 2P';
-  font-size: 0.8em;
-  cursor: pointer;
-  z-index: 9999;
-}
-
-/* Locked in overlay */
-#lockedPage {
+/* Credits overlay styling */
+#creditsOverlay {
   display: none;
   position: fixed; top:0; left:0; width:100%; height:100%;
   background:#111;
   color:#0f0;
-  font-size:2em;
+  font-size:1.5em;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  z-index:9998;
-  text-align:center;
+  z-index:9999;
   padding:20px;
+  text-align:center;
+}
+#closeCredits {
+  margin-top:20px;
+  padding:10px 20px;
+  background:#00FF00;
+  color:#000;
+  border:none;
+  border-radius:8px;
+  font-family:'Press Start 2P';
+  font-size:1em;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -100,8 +95,17 @@
   <span>T</span><span>e</span><span>m</span><span>p</span><span>l</span><span>e</span>
 </div>
 <button id="enterBtn">Enter</button>
-<button id="stuckBtn">🔒</button>
-<div id="lockedPage">You are locked here. Refresh to leave.</div>
+<button id="creditsBtn">Credits</button>
+
+<!-- Credits overlay -->
+<div id="creditsOverlay">
+  <h2>Credits</h2>
+  <p>Developed by Evan Maldonado</p>
+  <button id="closeCredits">Close</button>
+</div>
+
+<!-- Back button -->
+<button id="backBtn">Back</button>
 
 <script>
   // Animate "Trust Temple" words
@@ -109,23 +113,31 @@
     el.style.animationDelay = `${0.6 + i*0.2}s`;
   });
 
-  // Show "Enter" button after delay
+  // Show buttons after delay
   setTimeout(() => {
-    const btn = document.getElementById('enterBtn');
-    btn.classList.add('show');
+    document.getElementById('enterBtn').classList.add('show');
+    document.getElementById('creditsBtn').classList.add('show');
   }, 3000);
 
-  // "Enter" button goes to main page (simulate with a transition)
+  // "Enter" button - go to main page (here, just alert or you can redirect)
   document.getElementById('enterBtn').onclick = () => {
-    // In real implementation, redirect or load main content
-    alert('Welcome to the main page! (This would navigate in a real site)');
+    alert("Welcome to the main page! (Implement navigation as needed)");
   };
 
-  // "Stuck" button triggers the lock overlay
-  document.getElementById('stuckBtn').onclick = () => {
-    document.getElementById('lockedPage').style.display='flex';
+  // "Credits" button - show credits overlay
+  document.getElementById('creditsBtn').onclick = () => {
+    document.getElementById('creditsOverlay').style.display = 'flex';
+  };
+
+  // Close credits overlay
+  document.getElementById('closeCredits').onclick = () => {
+    document.getElementById('creditsOverlay').style.display='none';
+  };
+
+  // "Back" button - go back to intro (here, just alert or reset)
+  document.getElementById('backBtn').onclick = () => {
+    alert("Back to intro (implement as needed)");
   };
 </script>
-
 </body>
 </html>
