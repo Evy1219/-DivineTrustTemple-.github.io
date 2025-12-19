@@ -71,6 +71,7 @@
   50% { box-shadow: 0 0 20px #0f0; }
   100% { box-shadow: 0 0 10px #0f0; }
 }
+
 /* Main styles */
 #mainContent {
   display: none;
@@ -94,17 +95,33 @@
   font-size: 2em;
   font-family: Courier New;
 }
-/* Logo style */
-#logo {
-  text-align: center;
-  font-family:'Press Start 2P', cursive;
-  font-size:4em;
-  color:#00FF00;
-  margin:20px 0;
-  letter-spacing:2px;
-  text-shadow:0 0 10px #00FF00, 0 0 20px #00FF00;
+/* "Hello World" Loop Style */
+#helloLoopContainer {
+  width: 100%;
+  overflow: hidden;
+  height: 50px;
+  background-color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-/* Content layout */
+#helloText {
+  white-space: nowrap;
+  display: inline-block;
+  font-family:'Press Start 2P', cursive;
+  font-size: 2em;
+  color:#00FF00;
+  animation: scrollLeft 10s linear infinite;
+}
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+/* Content layout for boxes */
 #middleSection {
   display: flex;
   flex-direction: column;
@@ -190,21 +207,10 @@
     <h1>Trust Temple</h1>
   </div>
   
-  <!-- FANCY ASCII TEMPLE LOGO -->
-  <div id="logo">
-<pre style="margin:0; line-height:1.2;">
-      /\
-     /**\
-    /****\
-   /******\
-  /********\
- /**Temple**\
-/************\
-|            |
-|    🏛️    |
-|____________|
-</pre>
-</div>
+  <!-- "Hello World" Loop Container -->
+  <div id="helloLoopContainer">
+    <div id="helloText">HELLO WORLD &nbsp; HELLO WORLD &nbsp; HELLO WORLD &nbsp; HELLO WORLD &nbsp; </div>
+  </div>
   
   <!-- Middle boxes in grid -->
   <div id="middleSection">
