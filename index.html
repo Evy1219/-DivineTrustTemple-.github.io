@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>TrustTemple - Unique 64-bit Temple Loader</title>
+<title>TrustTemple - Pyramid to Trust Temple Intro</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 <style>
   body {
@@ -16,30 +16,20 @@
     flex-direction: column;
   }
 
-  /* Background static noise for vibe */
-  #background {
-    position: fixed; top:0; left:0; right:0; bottom:0;
+  /* Background static for vibe */
+  #staticNoise {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background-image: repeating-linear-gradient(0deg,
+      transparent, transparent 1px,
+      rgba(0,255,0,0.05) 1px, rgba(0,255,0,0.05) 2px);
+    animation: static 1s infinite;
     z-index: -1;
-    background: #000;
   }
 
-  /* Generate random pixel noise background for effect */
   @keyframes static {
     0% { opacity: 0.3; }
     50% { opacity: 0.7; }
     100% { opacity: 0.3; }
-  }
-  #staticNoise {
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1px,
-      rgba(0,255,0,0.05) 1px,
-      rgba(0,255,0,0.05) 2px
-    );
-    animation: static 1s infinite;
-    z-index: -2;
   }
 
   /* Loader container */
@@ -54,16 +44,18 @@
   height: 70vh;
 }
 
-/* The temple grid build (64-bit style) */
-#templeGrid {
+/* Pyramid grid (builds up) */
+#pyramidGrid {
   display: grid;
-  grid-template-columns: repeat(8, 20px);
-  grid-template-rows: repeat(8, 20px);
+  grid-template-columns: repeat(7, 20px);
+  grid-template-rows: repeat(7, 20px);
   gap: 2px;
   margin-bottom: 20px;
+  opacity: 1;
+  transition: all 1s ease;
 }
 
-/* blocks in the grid */
+/* Blocks in the pyramid */
 .block {
   width: 20px;
   height: 20px;
@@ -73,20 +65,38 @@
   transform: scale(0.8);
   transition: all 0.3s ease;
 }
-
-/* Build animation */
-@keyframes buildBlock {
-  0% { opacity: 0; transform: scale(0.5); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* Show blocks as they build */
 .showBlock {
   opacity: 1;
   transform: scale(1);
 }
 
-/* The "Enter" button */
+/* Shape for trust temple (initially hidden) */
+#trustShape {
+  width: 0; height: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  opacity: 0;
+  margin-top: 20px;
+  transition: all 2s ease;
+}
+
+/* Transition to temple shape (polygon shape) */
+#trustShape.transform {
+  width: 200px;
+  height: 100px;
+  background: #00FF00;
+  clip-path: polygon(
+    50% 0%, 
+    100% 50%, 
+    80% 100%, 
+    20% 100%, 
+    0% 50%
+  );
+  opacity: 1;
+}
+
+/* Fade in "Enter" button */
 #enterBtn {
   display: none;
   margin-top: 20px;
@@ -99,7 +109,12 @@
   border-radius: 10px;
   box-shadow: 0 0 10px #00FF00;
   cursor: pointer;
-  z-index: 10;
+  opacity: 0;
+  transition: opacity 1s;
+}
+#enterBtn.show {
+  display: block;
+  opacity: 1;
 }
 
 /* Main page styles */
@@ -114,18 +129,6 @@
   border-radius: 10px;
   position: relative;
 }
-
-/* Info boxes in main page */
-.infoBox {
-  background: #222;
-  border: 2px solid #00FF00;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  font-size: 0.9em;
-}
-
-/* "X" close button on main page top-left */
 #closeBtn {
   position: absolute;
   top: 10px;
@@ -137,11 +140,20 @@
   font-size: 1em;
   border-radius: 50%;
   box-shadow: 0 0 10px #00FF00;
-  cursor: pointer;
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  cursor: pointer;
+}
+
+/* Info boxes in main page */
+.infoBox {
+  background: #222;
+  border: 2px solid #00FF00;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 0.9em;
 }
 </style>
 </head>
@@ -150,8 +162,11 @@
 <div id="staticNoise"></div>
 
 <div id="loader">
-  <div id="templeGrid"></div>
-  <button id="enterBtn">Enter</button>
+  <div id="pyramidContainer">
+    <div id="pyramidGrid"></div>
+    <div id="trustShape"></div>
+    <button id="enterBtn">Enter</button>
+  </div>
 </div>
 
 <div id="mainPage">
@@ -164,51 +179,57 @@
 </div>
 
 <script>
-  // Generate static noise dots (not necessary but adds vibe)
+  // Generate static noise
   const staticDiv = document.getElementById('staticNoise');
 
-  // Generate 64 grid blocks for temple
-  const gridContainer = document.getElementById('templeGrid');
-
-  const totalBlocks = 64; // 8x8 grid
+  // Generate pyramid blocks
+  const grid = document.getElementById('pyramidGrid');
+  const totalBlocks = 28; // 7x4 pyramid
   const blocks = [];
-
-  for (let i = 0; i < totalBlocks; i++) {
-    const block = document.createElement('div');
-    block.className = 'block';
-    gridContainer.appendChild(block);
-    blocks.push(block);
+  for (let i=0; i<totalBlocks; i++) {
+    const b = document.createElement('div');
+    b.className = 'block';
+    grid.appendChild(b);
+    blocks.push(b);
   }
 
-  let buildIndex = 0;
-
-  // Animate build-up of temple blocks
+  let index = 0;
   const buildInterval = setInterval(() => {
-    if (buildIndex >= blocks.length) {
+    if (index >= blocks.length) {
       clearInterval(buildInterval);
-      // Show "Enter" button at the end
-      document.getElementById('enterBtn').style.display = 'block';
+      // Animate into trust temple shape
+      document.getElementById('trustShape').classList.add('transform');
+      // Fade in "Enter" button after delay
+      setTimeout(() => {
+        const btn = document.getElementById('enterBtn');
+        btn.style.display = 'block';
+        setTimeout(() => { btn.classList.add('show'); }, 50);
+      }, 2000);
       return;
     }
+    blocks[index].classList.add('showBlock');
+    index++;
+  }, 300); // slow build
 
-    // Animate block
-    blocks[buildIndex].classList.add('showBlock');
-    buildIndex++;
-  }, 200); // slow build
+  // Animate pyramid to trust temple shape
+  document.getElementById('trustShape').addEventListener('transitionend', () => {
+    // Could do additional animations here if needed
+  });
 
-  // "Enter" button click to transition
+  // Enter button click
   document.getElementById('enterBtn').onclick = () => {
     document.getElementById('loader').style.display = 'none';
     document.getElementById('mainPage').style.display = 'block';
-    document.getElementById('closeBtn').style.display = 'flex';
+    document.getElementById('closeBtn').style.display = 'block';
   };
 
-  // "X" close button in main page
+  // Close button in main page
   document.getElementById('closeBtn').onclick = () => {
     document.getElementById('loader').style.display = 'flex';
     document.getElementById('mainPage').style.display = 'none';
     document.getElementById('closeBtn').style.display = 'none';
   };
 </script>
+
 </body>
 </html>
