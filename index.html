@@ -16,7 +16,7 @@
     overflow: hidden;
   }
 
-  /* Container for intro animation */
+  /* Intro container centered with animation */
 #introContainer {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -27,9 +27,9 @@
   justify-content: center;
   z-index: 10;
   padding: 20px;
+  transition: opacity 0.5s ease;
 }
 
-/* Trust text animated in */
 #trustText {
   font-size: 3em;
   display: flex;
@@ -53,7 +53,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Buttons in intro menu */
+/* Buttons style and initial hidden state */
 #introButtons {
   margin-top: 30px;
   display: flex;
@@ -75,14 +75,26 @@ button {
   font-size: 1em;
   cursor: pointer;
   color: #000;
+  opacity: 0;
   transition: all 0.3s;
 }
-button:hover {
-  background-color: #fff;
-  color: #000;
+button.show {
+  opacity: 1;
 }
 
-/* Main menu (after intro) */
+/* Animate Enter button after intro */
+#enterBtn.animate {
+  animation: pulse 1s infinite;
+}
+
+/* Pulsing animation for enter button */
+@keyframes pulse {
+  0% { box-shadow: 0 0 10px #0f0; }
+  50% { box-shadow: 0 0 20px #0f0; }
+  100% { box-shadow: 0 0 10px #0f0; }
+}
+
+/* Main menu with no extra button, just animated enter button */
 #mainMenu {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -98,33 +110,41 @@ button:hover {
   display: flex;
 }
 
-/* Main page (after clicking Enter) */
+/* Main page styled like a website for blogging */
 #mainPage {
-  display: none; /* hidden initially */
+  display: none;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #222;
-  border: 4px solid #0f0;
-  border-radius: 8px;
-  margin: auto;
-  padding: 20px;
-  max-width: 800px;
-  height: 100%;
-  box-sizing: border-box;
-  overflow: auto;
-  transform: scale(1);
-  transition: transform 0.5s ease;
-  z-index: 10;
+  background: #fff;
+  color: #000;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 #mainPage.show {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+}
+#header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+#content {
+  flex: 1;
+  padding: 20px;
+}
+#footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
 }
 #backButton {
-  align-self: flex-end;
-  margin-bottom: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
   padding: 10px 15px;
   background: #0f0;
   border: none;
@@ -134,7 +154,36 @@ button:hover {
   cursor: pointer;
 }
 
-/* Content boxes on main page for neatness */
+/* Trust Temple info page */
+#trustPage {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  background: #222;
+  border: 4px solid #0f0;
+  border-radius: 8px;
+  height: 100vh;
+  overflow: auto;
+  position: relative;
+}
+#trustPage.show {
+  display: flex;
+}
+#trustBackBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 15px;
+  background: #0f0;
+  border: none;
+  border-radius: 50%;
+  font-family: 'Press Start 2P';
+  font-size: 0.8em;
+  cursor: pointer;
+}
 .box {
   background: #333;
   border: 2px solid #0f0;
@@ -152,7 +201,7 @@ h2, h3 {
 </head>
 <body>
 
-<!-- Intro animation -->
+<!-- Intro with text and button -->
 <div id="introContainer">
   <div id="trustText">
     <span>T</span><span>r</span><span>u</span><span>s</span><span>t</span>
@@ -161,23 +210,35 @@ h2, h3 {
   </div>
   <div id="introButtons">
     <button id="startBtn">Start</button>
-    <button id="showMenuBtn">Main Menu</button>
   </div>
 </div>
 
-<!-- Main menu (after intro) -->
+<!-- Main menu with animated Enter button -->
 <div id="mainMenu">
   <button id="enterBtn">Enter</button>
 </div>
 
-<!-- Main page after entering -->
+<!-- Main website page (blog layout) -->
 <div id="mainPage">
-  <button id="backButton">&times;</button>
-  <h2>Welcome to the Main Page</h2>
-  <div class="box">
-    <h3>About the Site</h3>
-    <p>This is your main content. Customize as needed.</p>
+  <div id="header">
+    <h1>My Blog</h1>
+    <p>Welcome to my website!</p>
   </div>
+  <div id="content">
+    <h2>Latest Posts</h2>
+    <div class="box">
+      <h3>Post Title 1</h3>
+      <p>Here is a sample blog post. Write your content here.</p>
+    </div>
+    <div class="box">
+      <h3>Post Title 2</h3>
+      <p>Another post with some content. Customize your blog here.</p>
+    </div>
+  </div>
+  <div id="footer">
+    &copy; 2024 My Blog. All rights reserved.
+  </div>
+  <button id="blogBackBtn" style="position: absolute; top: 20px; right: 20px; padding: 10px 15px; background:#0f0; border:none; border-radius:50%; font-family:'Press Start 2P'; font-size:0.8em; cursor:pointer;">&times;</button>
 </div>
 
 <!-- Trust Temple info page -->
@@ -204,42 +265,41 @@ h2, h3 {
     el.style.animationDelay = `${0.6 + i*0.2}s`;
   });
 
-  // Show intro buttons after delay
+  // Show "Start" button after 3 seconds
   setTimeout(() => {
-    document.getElementById('introButtons').classList.add('show');
+    document.getElementById('startBtn').classList.add('show');
   }, 3000);
 
-  // Fade in intro buttons
-  document.getElementById('introButtons').classList.add('show');
-
-  // Show "Start" button (acts as main menu)
+  // Fade in the "Enter" button with animation after intro
   document.getElementById('startBtn').onclick = () => {
-    document.getElementById('introContainer').style.display = 'none';
+    document.getElementById('introContainer').style.display='none';
+    const enterBtn = document.getElementById('enterBtn');
     document.getElementById('mainMenu').classList.add('show');
+    // Animate the button after a delay
+    setTimeout(() => {
+      enterBtn.classList.add('show', 'animate');
+    }, 300);
   };
 
-  // Show the main page
+  // When "Enter" clicked, go to main website page
   document.getElementById('enterBtn').onclick = () => {
     document.getElementById('mainMenu').classList.remove('show');
     document.getElementById('mainPage').classList.add('show');
   };
 
-  // Back button in main page
-  document.getElementById('backButton').onclick = () => {
+  // Back button in main website to go back to main menu
+  document.getElementById('blogBackBtn').onclick = () => {
     document.getElementById('mainPage').classList.remove('show');
     document.getElementById('mainMenu').classList.add('show');
   };
 
   // Show Trust Temple info page
-  document.getElementById('showMenuBtn').onclick = () => {
-    document.getElementById('introContainer').style.display = 'none';
-    document.getElementById('trustPage').classList.add('show');
-  };
-
-  // Back button in trust page
+  document.getElementById('showMenuBtn')?.addEventListener('click', () => {
+    // Not needed now, since no button
+  });
   document.getElementById('trustBackBtn').onclick = () => {
     document.getElementById('trustPage').classList.remove('show');
-    document.getElementById('introContainer').style.display = 'flex';
+    document.getElementById('introContainer').style.display='flex';
   };
 </script>
 
