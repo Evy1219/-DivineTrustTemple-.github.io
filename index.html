@@ -5,183 +5,156 @@
 <title>TrustTemple - Welcome to the Ultimate Trust Platform</title>
 <!-- Google Font for a pixel-like style -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-<!-- Styles -->
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Press Start 2P', cursive;
-    background-color: #000; /* black background */
-    color: #00FF00;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+body {
+  margin: 0; padding: 0;
+  font-family: 'Press Start 2P', cursive;
+  background-color: #000;
+  color: #00FF00;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-  /* Background of 1s and 0s */
-  #background {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: -1; /* behind everything */
-    background: black;
-    font-family: monospace;
-    font-size: 10px;
-    color: #222;
-    line-height: 10px;
-    opacity: 0.2;
-  }
+/* Falling 1s and 0s background */
+#background {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background: black;
+  font-family: monospace;
+  font-size: 10px;
+  opacity: 0.2;
+}
 
-  /* Generate falling 1s and 0s */
-  @keyframes fall {
-    0% {transform: translateY(0);}
-    100% {transform: translateY(100vh);}
-  }
+/* Falling code animation */
+@keyframes fall {
+  0% {transform: translateY(0);}
+  100% {transform: translateY(100vh);}
+}
 
-  .digit {
-    position: absolute;
-    top: -10px;
-    left: calc(100% * var(--i));
-    animation: fall 10s linear infinite;
-  }
+.digit {
+  position: absolute;
+  top: -10px;
+  font-size: 8px;
+  color: #222;
+  animation: fall 15s linear infinite;
+}
 
-  /* Animated loading screen styles */
-  #loading {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 9999;
-  }
+/* Loading overlay */
+#loading {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+}
 
-  #templeContainer {
-    text-align: center;
-  }
+/* Container for the intro animation */
+#templeContainer {
+  text-align: center;
+}
 
-  /* "Temple" word build-up animation */
-  #templeText {
-    font-size: 4em;
-    margin-bottom: 20px;
-  }
-  .letter {
-    display: inline-block;
-    opacity: 0;
-    font-size: 4em;
-    animation: appear 1s forwards;
-  }
-  /* Delay each letter for build-up effect (slower) */
-  .letter:nth-child(1) { animation-delay: 0s; }
-  .letter:nth-child(2) { animation-delay: 0.5s; }
-  .letter:nth-child(3) { animation-delay: 1s; }
-  .letter:nth-child(4) { animation-delay: 1.5s; }
-  .letter:nth-child(5) { animation-delay: 2s; }
-  .letter:nth-child(6) { animation-delay: 2.5s; }
+/* "Temple" build-up text style */
+#templeText {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+.letter {
+  display: inline-block;
+  opacity: 0;
+  font-size: 4em;
+  animation: appear 1s forwards;
+}
+.letter:nth-child(1) { animation-delay: 0s; }
+.letter:nth-child(2) { animation-delay: 0.5s; }
+.letter:nth-child(3) { animation-delay: 1s; }
+.letter:nth-child(4) { animation-delay: 1.5s; }
+.letter:nth-child(5) { animation-delay: 2s; }
+.letter:nth-child(6) { animation-delay: 2.5s; }
 
-  @keyframes appear {
-    to { opacity: 1; }
-  }
+@keyframes appear {
+  to { opacity: 1; }
+}
 
-  /* Temple shape under the text */
-  #templeShape {
-    width: 0; height: 0;
-    border-left: 40px solid transparent;
-    border-right: 40px solid transparent;
-    border-bottom: 50px solid #00FF00;
-    margin: 0 auto;
-    animation: rise 1s forwards;
-    opacity: 0;
-    animation-delay: 3.5s;
-  }
+/* "Temple" shape components */
+#templeShape {
+  width: 0; height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 50px solid #00FF00;
+  margin: 0 auto;
+  opacity: 0;
+  animation: rise 1s forwards;
+  animation-delay: 4s;
+}
+#templeBase {
+  width: 80px;
+  height: 20px;
+  background-color: #00FF00;
+  margin: 0 auto;
+  margin-top: 0;
+  opacity: 0;
+  animation: riseBase 1s forwards;
+  animation-delay: 4.2s;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes riseBase {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  #templeBase {
-    width: 80px;
-    height: 20px;
-    background-color: #00FF00;
-    margin: 0 auto;
-    margin-top: 0;
-    animation: riseBase 1s forwards;
-    opacity: 0;
-    animation-delay: 3.7s;
-  }
+/* "Enter" button */
+#enterBtn {
+  display: none;
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.2em;
+  background: #00FF00;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00FF00;
+  cursor: pointer;
+}
 
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes riseBase {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+/* Main content hidden initially */
+#mainContent {
+  display: none;
+  flex: 1;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #222;
+  border: 4px solid #00FF00;
+  border-radius: 8px;
+  text-align: center;
+}
 
-  /* Enter button after intro */
-  #enterBtn {
-    display: none; /* show after animation */
-    padding: 15px 30px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.2em;
-    cursor: pointer;
-    border: none;
-    background-color: #00FF00;
-    color: #000;
-    border-radius: 4px;
-    box-shadow: 0 0 10px #00FF00;
-    margin-top: 20px;
-  }
-
-  /* Main page styles (hidden initially) */
-  #mainContent {
-    display: none;
-    flex: 1;
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #222;
-    border: 4px solid #00FF00;
-    border-radius: 8px;
-    text-align: center;
-  }
-
-  #mainContent h1 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 2em;
-    color: #00FF00;
-    margin-bottom: 20px;
-  }
-
-  #mainContent p {
-    font-size: 1.2em;
-  }
-
-  /* Footer styles */
-  footer {
-    background-color: #000;
-    padding: 10px;
-    text-align: center;
-    color: #00FF00;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.8em;
-  }
-
-  /* Back button (stickers) */
-  #backButton {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background-color: #00FF00;
-    color: #000;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1em;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #00FF00;
-    cursor: pointer;
-    display: none; /* hidden initially */
-    z-index: 9998;
-    user-select: none;
-  }
+/* Back button (stickers) */
+#backButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #00FF00;
+  color: #000;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1em;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00FF00;
+  cursor: pointer;
+  display: none;
+  z-index: 9998;
+}
 </style>
 </head>
 <body>
@@ -189,7 +162,7 @@
 <!-- Background of 1s and 0s -->
 <div id="background"></div>
 
-<!-- Loading overlay -->
+<!-- Loading overlay with animation -->
 <div id="loading">
   <div id="templeContainer">
     <div id="templeText">
@@ -202,35 +175,31 @@
     </div>
     <div id="templeShape"></div>
     <div id="templeBase"></div>
+    <!-- Enter button appears after animation -->
+    <button id="enterBtn">Enter</button>
   </div>
-  <!-- Enter button appears after animation -->
-  <button id="enterBtn">Enter</button>
 </div>
 
-<!-- Main content (hidden initially) -->
+<!-- Main page (hidden initially) -->
 <div id="mainContent">
   <h1>TrustTemple</h1>
   <p>Welcome to the ultimate trust platform.</p>
   <p>Built with the spirit of simplicity and retro style.</p>
 </div>
 
-<!-- Back button (stickers) -->
+<!-- Back button -->
 <button id="backButton">Back</button>
 
-<!-- Footer -->
-<footer>
-  &copy; 2025 TrustTemple
-</footer>
-
-<!-- Script -->
+<!-- Scripts -->
 <script>
-  // Generate background of 1s and 0s
+  // Generate background of falling 1s and 0s
   const background = document.getElementById('background');
-  for(let i=0; i<200; i++) {
+  for(let i=0; i<300; i++) {
     const span = document.createElement('div');
     span.className = 'digit';
     span.style.setProperty('--i', Math.random() * 100);
     span.textContent = Math.random() > 0.5 ? '1' : '0';
+    // Random position
     span.style.top = Math.random() * window.innerHeight + 'px';
     span.style.left = Math.random() * window.innerWidth + 'px';
     background.appendChild(span);
@@ -241,22 +210,21 @@
   const enterBtn = document.getElementById('enterBtn');
   const backBtn = document.getElementById('backButton');
 
-  // Show "Enter" button after animation
+  // Show "Enter" button after the intro animation
   window.onload = () => {
     setTimeout(() => {
-      // Show the Enter button after delays
       document.getElementById('enterBtn').style.display = 'block';
-    }, 4000);
+    }, 5000); // longer delay for slower animation
   };
 
-  // When "Enter" clicked
+  // Enter button click
   enterBtn.onclick = () => {
     loading.style.display = 'none';
     mainContent.style.display = 'block';
     backBtn.style.display = 'block';
   };
 
-  // When "Back" clicked
+  // Back button click
   backBtn.onclick = () => {
     loading.style.display = 'flex';
     mainContent.style.display = 'none';
