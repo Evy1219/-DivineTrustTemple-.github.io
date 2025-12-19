@@ -97,7 +97,7 @@
   font-family: Courier New;
 }
 
-/* "Who Am I" title box */
+/* "Who Am I" section */
 #topBoxContainer {
   width: 100%;
   padding: 10px 0;
@@ -133,7 +133,7 @@
   text-align: center;
 }
 
-/* "Hello World" scrolling text in the middle */
+/* "Hello World" scrolling with glitch effect */
 #helloLoopContainer {
   width: 100%;
   height: 60px;
@@ -147,10 +147,10 @@
 #helloText {
   font-family: 'Orbitron', sans-serif; /* Futuristic font */
   font-size: 2em;
-  color: #00FF00; /* Green glow */
+  color: #00FF00; /* Glow color */
   white-space: nowrap;
   display: inline-block;
-  animation: scrollLeft 15s linear infinite;
+  animation: scrollLeft 15s linear infinite, glitch 1s steps(2, start) infinite;
 }
 @keyframes scrollLeft {
   0% {
@@ -158,6 +158,27 @@
   }
   100% {
     transform: translateX(-100%);
+  }
+}
+/* Glitch animation for flickering effect */
+@keyframes glitch {
+  0% {
+    text-shadow: none;
+  }
+  20% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+  }
+  40% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+  }
+  60% {
+    text-shadow: none;
+  }
+  80% {
+    text-shadow: 1px 0 red, -1px 0 blue;
+  }
+  100% {
+    text-shadow: none;
   }
 }
 
@@ -254,9 +275,9 @@
     </div>
   </div>
   
-  <!-- "Hello World" scrolling message -->
+  <!-- "Hello World" scrolling message with glitch -->
   <div id="helloLoopContainer">
-    <div id="helloText">HELLO WORLD &nbsp; &nbsp; HELLO WORLD &nbsp; &nbsp; HELLO WORLD &nbsp; &nbsp; HELLO WORLD &nbsp; &nbsp;</div>
+    <div id="helloText"></div>
   </div>
   
   <!-- Three boxes at the bottom -->
@@ -306,6 +327,33 @@
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('mainContent').classList.remove('show');
   };
+
+  // Generate random "HELLO WORLD" string with random spacing
+  const messageCount = 50; // total repetitions
+  const baseMessage = 'HELLO WORLD';
+  let message = '';
+  for(let i=0; i<messageCount; i++) {
+    const randSpaces = ' '.repeat(Math.floor(Math.random() * 10 + 1));
+    message += baseMessage + randSpaces;
+  }
+  document.getElementById('helloText').textContent = message;
+
+  // Add glitch effect via CSS
+  const styleSheet = document.createElement("style");
+  styleSheet.innerText = `
+  @keyframes glitch {
+    0% { text-shadow: none; }
+    20% { text-shadow: 2px 0 red, -2px 0 blue; }
+    40% { text-shadow: -2px 0 red, 2px 0 blue; }
+    60% { text-shadow: none; }
+    80% { text-shadow: 1px 0 red, -1px 0 blue; }
+    100% { text-shadow: none; }
+  }
+  #helloText {
+    animation: scrollLeft 15s linear infinite, glitch 1s steps(2, start) infinite;
+  }
+  `;
+  document.head.appendChild(styleSheet);
 </script>
 
 </body>
