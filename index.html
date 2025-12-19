@@ -133,10 +133,10 @@
   text-align: center;
 }
 
-/* Floating quote "HELLO WORLD" with reactive movement */
+/* Floating quote "HELLO WORLD" that reacts to cursor, positioned above middle boxes */
 #helloFloating {
   position: absolute;
-  top: 150px; /* slightly above the boxes */
+  top: 250px; /* position in the space between "Who Am I" and boxes */
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Orbitron', sans-serif;
@@ -149,8 +149,7 @@
   background: transparent;
   user-select: none;
   cursor: default;
-  /* To give it a unique look with quotes */
-  font-family: 'Orbitron', sans-serif;
+  /* Unique style with quotes via pseudo-elements */
 }
 #helloFloating::before,
 #helloFloating::after {
@@ -159,14 +158,6 @@
   color: #00FF00;
   margin: 0 5px;
 }
-@keyframes glitch {
-  0% { text-shadow: none; }
-  20% { text-shadow: 2px 0 red, -2px 0 blue; }
-  40% { text-shadow: -2px 0 red, 2px 0 blue; }
-  60% { text-shadow: none; }
-  80% { text-shadow: 1px 0 red, -1px 0 blue; }
-  100% { text-shadow: none; }
-}
 
 /* Animate scrolling for the main content boxes */
 #middleSection {
@@ -174,7 +165,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  margin-top: 250px; /* space below the floating text */
+  margin-top: 100px; /* space below the floating quote */
 }
 #middleBoxes {
   display: grid;
@@ -262,7 +253,7 @@
     </div>
   </div>
   
-  <!-- Floating "HELLO WORLD" quote that reacts to cursor -->
+  <!-- Floating "HELLO WORLD" quote -->
   <div id="helloFloating">"HELLO WORLD"</div>
   
   <!-- The boxes underneath -->
@@ -313,7 +304,7 @@
     document.getElementById('mainContent').classList.remove('show');
   };
 
-  // Cursor reactive movement for "HELLO WORLD" quote
+  // Cursor movement reactive effect for "HELLO WORLD" quote
   const helloDiv = document.getElementById('helloFloating');
   document.addEventListener('mousemove', (e) => {
     const rect = helloDiv.getBoundingClientRect();
@@ -321,10 +312,9 @@
     const centerY = rect.top + rect.height/2;
     const dx = e.clientX - centerX;
     const dy = e.clientY - centerY;
-    // Move slightly based on cursor distance
-    const moveX = dx * 0.01; // scale factor
-    const moveY = dy * 0.01;
-    helloDiv.style.transform = `translateX(calc(-50% + ${moveX}px)) translateY(${moveY}px)`;
+    const moveX = dx * 0.005; // smaller scale for subtle movement
+    const moveY = dy * 0.005;
+    helloDiv.style.transform = `translateX(-50%) translateX(${moveX}px) translateY(${moveY}px)`;
   });
 </script>
 
