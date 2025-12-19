@@ -2,222 +2,128 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>TrustTemple - Shatter & Transition</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+<title>Trust Temple - Main & Locked</title>
 <style>
   body {
     margin: 0; padding: 0;
-    font-family: 'Press Start 2P', cursive;
     background: #000;
+    font-family: 'Press Start 2P', cursive;
     color: #00FF00;
     height: 100vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* Temple container for intro */
-#templeContainer {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100vh;
-  position: relative;
-  transform-origin: center center;
-  transition: transform 2s ease, opacity 2s ease;
-}
-
-/* The temple triangle */
-#temple {
-  width: 0; height: 0;
-  border-left: 100px solid transparent;
-  border-right: 100px solid transparent;
-  border-bottom: 200px solid #00FF00;
-  opacity: 0;
-  animation: templeBuild 2s forwards;
-}
-
-/* Base of the temple */
-#templeBase {
-  width: 200px; height: 30px;
-  background: #00FF00;
-  margin-top: 10px;
-  opacity: 0;
-  animation: baseBuild 1s forwards;
-  animation-delay: 2s;
-}
-
-/* "Trust Temple" text inside the temple, initially hidden */
+  /* Animate "Trust Temple" words */
 #trustText {
-  position: absolute;
-  top: calc(50% - 20px);
-  width: 100%;
-  text-align: center;
-  font-size: 2em;
+  font-size: 3em;
+  display: flex;
+  gap: 10px;
   opacity: 0;
-  font-family: 'Press Start 2P', cursive;
+  animation: appearText 2s forwards;
+  animation-delay: 0.5s;
+}
+#trustText span {
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: bounceIn 1s forwards;
+}
+#trustText span:nth-child(1) { animation-delay: 0.6s; }
+#trustText span:nth-child(2) { animation-delay: 0.8s; }
+
+@keyframes appearText {
+  to { opacity: 1; }
+}
+@keyframes bounceIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Build animations for temple shape */
-@keyframes templeBuild {
-  0% {opacity:0; transform: scale(0.5);}
-  100% {opacity:1; transform: scale(1);}
-}
-@keyframes baseBuild {
-  0% {opacity:0; transform: translateY(-20px);}
-  100% {opacity:1; transform: translateY(0);}
-}
-
-/* Enter button */
+/* "Enter" button style */
 #enterBtn {
   display: none;
   margin-top: 30px;
   padding: 15px 30px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1em;
   background: #00FF00;
   color: #000;
   border: none;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00FF00;
+  font-family: 'Press Start 2P';
+  font-size: 1em;
   cursor: pointer;
   opacity: 0;
   transition: opacity 1s;
 }
-
-/* Shatter effect for button */
-#enterBtn.shatter {
-  animation: shatterAnim 1s forwards;
+#enterBtn.show {
+  display: block;
+  opacity: 1;
 }
 
-@keyframes shatterAnim {
-  0% { transform: scale(1); opacity: 1; }
-  100% { 
-    transform: scale(2);
-    opacity: 0;
-    filter: blur(4px);
-  }
-}
-
-/* Main page style */
-#mainPage {
-  display: none;
-  flex-direction: column;
-  padding: 20px;
-  max-width: 1000px;
-  margin: auto;
-  background: #111;
-  border: 4px solid #00FF00;
-  border-radius: 10px;
-  height: 100vh;
-  position: relative;
-  overflow: auto;
-  transform: scale(0);
-  transition: transform 2s ease;
-}
-
-/* "X" close button in main page */
-#closeBtn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 30px; height: 30px;
-  background: #00FF00;
-  color: #000;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1em;
+/* Stuck button */
+#stuckBtn {
+  position: fixed;
+  top: 10px; right: 10px;
+  padding: 10px 15px;
+  background: red;
+  color: #fff;
+  border: none;
   border-radius: 50%;
-  box-shadow: 0 0 10px #00FF00;
-  display: none;
-  align-items: center;
-  justify-content: center;
+  font-family: 'Press Start 2P';
+  font-size: 0.8em;
   cursor: pointer;
-  z-index: 10;
+  z-index: 9999;
 }
 
-/* Info boxes */
-.infoBox {
-  background: #222;
-  border: 2px solid #00FF00;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  font-size: 0.9em;
-}
-
-/* The scene zooms into main page after transition */
-#mainPage.zoom-in {
-  transform: scale(1);
+/* Locked in overlay */
+#lockedPage {
+  display: none;
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background:#111;
+  color:#0f0;
+  font-size:2em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+  text-align:center;
+  padding:20px;
 }
 </style>
 </head>
 <body>
 
-<!-- Intro with temple -->
-<div id="templeContainer">
-  <div id="temple"></div>
-  <div id="templeBase"></div>
-  <div id="trustText">Trust Temple</div>
-  <button id="enterBtn">Enter</button>
+<div id="trustText">
+  <span>T</span><span>r</span><span>u</span><span>s</span><span>t</span>
+  <span> </span>
+  <span>T</span><span>e</span><span>m</span><span>p</span><span>l</span><span>e</span>
 </div>
-
-<!-- Main page -->
-<div id="mainPage">
-  <button id="closeBtn">X</button>
-  <h1>TrustTemple</h1>
-  <div class="infoBox">Random info 1: The sky is blue.</div>
-  <div class="infoBox">Random info 2: Trust is everything.</div>
-  <div class="infoBox">Random info 3: Keep your secrets safe.</div>
-  <div class="infoBox">Random info 4: 64-bit style is cool.</div>
-</div>
+<button id="enterBtn">Enter</button>
+<button id="stuckBtn">🔒</button>
+<div id="lockedPage">You are locked here. Refresh to leave.</div>
 
 <script>
-  const temple = document.getElementById('temple');
-  const base = document.getElementById('templeBase');
-  const trustText = document.getElementById('trustText');
-  const enterBtn = document.getElementById('enterBtn');
-  const mainPage = document.getElementById('mainPage');
-  const closeBtn = document.getElementById('closeBtn');
-  const container = document.getElementById('templeContainer');
+  // Animate "Trust Temple" words
+  document.querySelectorAll('#trustText span').forEach((el, i) => {
+    el.style.animationDelay = `${0.6 + i*0.2}s`;
+  });
 
-  // Show "Enter" after temple build
+  // Show "Enter" button after delay
   setTimeout(() => {
-    enterBtn.style.display = 'block';
-    setTimeout(() => { enterBtn.style.opacity=1; }, 50);
+    const btn = document.getElementById('enterBtn');
+    btn.classList.add('show');
   }, 3000);
 
-  // On Enter click: shatter button, show trust words, zoom into main
+  // "Enter" button goes to main page (simulate with a transition)
   document.getElementById('enterBtn').onclick = () => {
-    // Shatter button
-    enterBtn.classList.add('shatter');
-
-    // After shatter animation, show "Trust Temple" text
-    setTimeout(() => {
-      trustText.style.opacity = 1;
-    }, 1000);
-
-    // Animate scene zoom
-    container.style.transition = 'transform 2s ease, opacity 2s ease';
-    container.style.transform = 'scale(0)';
-
-    // After zoom, show main page
-    setTimeout(() => {
-      document.getElementById('templeContainer').style.display = 'none';
-      mainPage.style.display = 'flex';
-      mainPage.classList.add('zoom-in');
-      // Animate zoom in
-      setTimeout(() => {
-        mainPage.style.transform = 'scale(1)';
-      }, 50);
-      // Show close button
-      closeBtn.style.display = 'block';
-    }, 2000);
+    // In real implementation, redirect or load main content
+    alert('Welcome to the main page! (This would navigate in a real site)');
   };
 
-  // Close button to go back to intro
-  document.getElementById('closeBtn').onclick = () => {
-    mainPage.style.display='none';
-    document.getElementById('templeContainer').style.display='flex';
-    // Reset trust text
-    trustText.style.opacity=0;
-    // Reset scene scale
-    container.style.transform='scale(1)';
+  // "Stuck" button triggers the lock overlay
+  document.getElementById('stuckBtn').onclick = () => {
+    document.getElementById('lockedPage').style.display='flex';
   };
 </script>
 
