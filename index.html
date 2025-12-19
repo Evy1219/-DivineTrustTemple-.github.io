@@ -149,51 +149,70 @@
   transition: box-shadow 0.3s ease;
 }
 
-/* Centered middle boxes area */
+/* Centered middle boxes in triangle style */
 #middleBoxesContainer {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 20px 0;
 }
 #middleBoxes {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(3, 1fr);
-  max-width: 900px;
-  width: 100%;
-}
-.section-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 20px;
 }
-.title-box {
+
+/* Top box (Inspiration's!) */
+#middleBoxes .top-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#middleBoxes .top-box .title-box {
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #006400;
+  box-shadow: 0 0 15px #00FF00; /* glow effect */
+}
+#middleBoxes .top-box h3 {
+  margin: 0;
+  font-size: 2em;
+}
+
+/* Bottom row with two boxes */
+#bottom-boxes {
+  display: flex;
+  gap: 20px;
+}
+#bottom-boxes .box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#bottom-boxes .box .title-box {
   background-color: #1a1a1a;
   padding: 10px;
   border-radius: 8px;
   border: 2px solid #006400;
-  text-align: center;
-  box-shadow: 0 0 10px #00FF00; /* initial glow */
+  box-shadow: 0 0 15px #00FF00; /* glow effect */
+}
+#bottom-boxes .box h3 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+/* Hover glow effect for boxes */
+.title-box {
   transition: box-shadow 0.3s ease;
 }
 .title-box:hover {
-  box-shadow: 0 0 20px #00FF00; /* glow on hover */
+  box-shadow: 0 0 20px #00FF00;
 }
-.content-box {
-  background-color: #1a1a1a;
-  padding: 15px;
-  border-radius: 8px;
-  border: 2px solid #006400;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.content-box p {
-  margin: 0;
-}
+
+/* Footer and button styles remain unchanged */
 #footer {
   background-color: #006400;
   padding: 15px;
@@ -252,20 +271,25 @@
       </div>
     </div>
 
-    <!-- Centered middle boxes -->
-    <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:20px 0;">
+    <!-- Middle boxes in triangle style -->
+    <div id="middleBoxesContainer">
       <div id="middleBoxes">
-        <div class="section-box">
-          <div class="title-box"><h3>Goals!</h3></div>
-          <div class="content-box"><p>Not like the soccer goal, My personal goals.</p></div>
+        <!-- Top Inspiration box -->
+        <div class="top-box">
+          <div class="title-box">
+            <h3>Inspiration's!</h3>
+          </div>
         </div>
-        <div class="section-box">
-          <div class="title-box"><h3>Inspiration's!</h3></div>
-          <div class="content-box"><p>People, Things, or moments that shape me</p></div>
-        </div>
-        <div class="section-box">
-          <div class="title-box"><h3>Guide's!</h3></div>
-          <div class="content-box"><p>Guide's made by personal reflection</p></div>
+        <!-- Bottom row with goals and guides -->
+        <div id="bottom-boxes">
+          <div class="box">
+            <div class="title-box"><h3>Goals!</h3></div>
+            <div class="content-box" style="width:150px;"><p>My personal goals.</p></div>
+          </div>
+          <div class="box">
+            <div class="title-box"><h3>Guide's!</h3></div>
+            <div class="content-box" style="width:150px;"><p>Guides made by personal reflection</p></div>
+          </div>
         </div>
       </div>
     </div>
