@@ -19,14 +19,11 @@
     min-height: 100vh;
   }
 
-  /* Overlay styles for landing screen */
-  #landing {
+  /* Animated loading screen styles */
+  #loading {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000; /* black background */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #000; /* black background */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,32 +31,67 @@
     z-index: 9999;
   }
 
-  #title {
-    font-size: 3em;
-    color: #FF0000; /* bright red for title */
+  #templeContainer {
+    text-align: center;
+  }
+
+  /* "Temple" word build-up animation */
+  #templeText {
+    font-size: 4em;
     margin-bottom: 20px;
-    animation: float 2s ease-in-out infinite;
+  }
+  .letter {
+    display: inline-block;
+    opacity: 0;
+    animation: appear 0.5s forwards;
+  }
+  /* Delay each letter for build-up effect */
+  .letter:nth-child(1) { animation-delay: 0s; }
+  .letter:nth-child(2) { animation-delay: 0.3s; }
+  .letter:nth-child(3) { animation-delay: 0.6s; }
+  .letter:nth-child(4) { animation-delay: 0.9s; }
+  .letter:nth-child(5) { animation-delay: 1.2s; }
+  .letter:nth-child(6) { animation-delay: 1.5s; }
+
+  @keyframes appear {
+    to { opacity: 1; }
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  /* Temple shape under the text */
+  #templeShape {
+    width: 0; height: 0;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-bottom: 50px solid #00FF00; /* roof */
+    margin: 0 auto;
+    animation: rise 1s forwards;
+    opacity: 0;
+    animation-delay: 2.5s;
   }
 
-  #enterBtn {
-    padding: 15px 30px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.2em;
-    cursor: pointer;
-    border: none;
-    background-color: #00FF00; /* bright green button */
-    color: #000; /* black text for contrast */
-    border-radius: 4px;
-    box-shadow: 0 0 10px #00FF00;
+  #templeBase {
+    width: 80px;
+    height: 20px;
+    background-color: #00FF00;
+    margin: 0 auto;
+    margin-top: 0;
+    animation: riseBase 1s forwards;
+    opacity: 0;
+    animation-delay: 2.7s;
   }
 
-  /* Main content styles */
-  main {
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes riseBase {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Main page styles (hidden during loading) */
+  #mainContent {
+    display: none; /* hide initially */
     flex: 1;
     max-width: 900px;
     margin: 40px auto;
@@ -69,18 +101,17 @@
     border-radius: 8px;
     text-align: center;
   }
-
-  h1 {
+  #mainContent h1 {
     font-family: 'Press Start 2P', cursive;
     font-size: 2em;
     color: #00FF00;
     margin-bottom: 20px;
   }
-
-  p {
+  #mainContent p {
     font-size: 1.2em;
   }
 
+  /* Footer styles */
   footer {
     background-color: #000;
     padding: 10px;
@@ -93,37 +124,43 @@
 </head>
 <body>
 
-<!-- Landing overlay -->
-<div id="landing" style="display: none;">
-  <div id="title">WELCOME TO TRUSTTEMPLE</div>
-  <button id="enterBtn">START</button>
+<!-- Loading overlay -->
+<div id="loading">
+  <div id="templeContainer">
+    <div id="templeText">
+      <span class="letter">T</span>
+      <span class="letter">e</span>
+      <span class="letter">m</span>
+      <span class="letter">p</span>
+      <span class="letter">l</span>
+      <span class="letter">e</span>
+    </div>
+    <div id="templeShape"></div>
+    <div id="templeBase"></div>
+  </div>
 </div>
 
-<!-- Main display -->
-<main>
+<!-- Main content (hidden initially) -->
+<div id="mainContent">
   <h1>TrustTemple</h1>
   <p>Welcome to the ultimate trust platform.</p>
   <p>Built with the spirit of simplicity and retro style.</p>
-</main>
+</div>
 
 <!-- Footer -->
 <footer>
   &copy; 2025 TrustTemple
 </footer>
 
-<!-- JavaScript for overlay control -->
+<!-- Script to handle loading -->
 <script>
-  // Show overlay only if not visited this session
-  if (!sessionStorage.getItem('visited')) {
-    document.getElementById('landing').style.display = 'flex';
-  } else {
-    document.getElementById('landing').style.display = 'none';
-  }
-
-  document.getElementById('enterBtn').addEventListener('click', () => {
-    document.getElementById('landing').style.display = 'none';
-    sessionStorage.setItem('visited', 'true');
-  });
+  // Show main content after loading animation
+  window.onload = () => {
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+    }, 4000); // 4 seconds for animation
+  };
 </script>
 
 </body>
