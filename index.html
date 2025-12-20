@@ -190,7 +190,7 @@
 }
 #middleBoxes {
   display: grid;
-  gap: 20px;
+  gap: 10px; /* Reduced gap between title and content boxes */
   grid-template-columns: repeat(3, 1fr);
   max-width: 900px;
   width: 100%;
@@ -198,16 +198,25 @@
 .section-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; /* Space between title box and content box */
 }
 .title-box {
   background-color: #1a1a1a;
-  padding: 10px;
+  padding: 15px; /* Increased padding for better spacing */
   border-radius: 8px;
   border: 2px solid #006400;
   text-align: center;
   box-shadow: 0 0 10px #00FF00;
   transition: box-shadow 0.3s ease;
+  height: 60px; /* Fixed height for consistent title boxes */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px; /* Small space below title boxes */
+}
+.title-box h3 {
+  margin: 0;
+  font-size: 0.9em; /* Adjusted font size for better fit */
 }
 .title-box:hover {
   box-shadow: 0 0 20px #00FF00;
@@ -215,7 +224,7 @@
 .content-box {
   background-color: #1a1a1a;
   padding: 15px;
-  min-height: 60px;
+  min-height: 120px; /* Made longer/taller */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -224,9 +233,13 @@
   position: relative;
   border: 2px solid #666; /* Grey border */
   box-shadow: 0 0 10px #666; /* Grey glow */
+  margin-top: 0; /* Remove top margin to bring closer to title */
 }
 .content-box p {
   margin: 0;
+  font-size: 0.8em; /* Adjusted font size for better fit */
+  text-align: center;
+  line-height: 1.4;
 }
 
 /* Grey notched corners for content boxes */
@@ -252,6 +265,25 @@
   right: -10px;
   border-left: none;
   border-top: none;
+}
+
+/* Spacing between the three columns */
+#middleBoxes .section-box:nth-child(1) {
+  margin-right: 5px; /* Space between first and second column */
+}
+
+#middleBoxes .section-box:nth-child(2) {
+  margin-left: 5px;
+  margin-right: 5px; /* Space around middle column */
+}
+
+#middleBoxes .section-box:nth-child(3) {
+  margin-left: 5px; /* Space between second and third column */
+}
+
+/* Make the grey description boxes almost touch each other horizontally */
+.content-box {
+  width: 100%;
 }
 
 #footer {
