@@ -29,12 +29,31 @@
   <button id="backBtn">Back</button>
   
   <div id="header">
+    <div class="header-symbol left-symbol">
+      <!-- Freemason SVG symbol (larger) -->
+      <svg width="60" height="60" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="19,4 36,34 2,34" stroke="#00FF00" stroke-width="3.5" fill="none"/>
+        <line x1="19" y1="4" x2="19" y2="34" stroke="#00FF00" stroke-width="3.5"/>
+        <circle cx="19" cy="24" r="6" stroke="#00FF00" stroke-width="2.5" fill="none"/>
+      </svg>
+    </div>
     <h1>Trust Temple</h1>
+    <div class="header-symbol right-symbol">
+      <!-- Freemason SVG symbol (larger) -->
+      <svg width="60" height="60" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="19,4 36,34 2,34" stroke="#00FF00" stroke-width="3.5" fill="none"/>
+        <line x1="19" y1="4" x2="19" y2="34" stroke="#00FF00" stroke-width="3.5"/>
+        <circle cx="19" cy="24" r="6" stroke="#00FF00" stroke-width="2.5" fill="none"/>
+      </svg>
+    </div>
     <div id="worldClock">
       <div id="clockTime">EST: 00:00:00</div>
       <div id="clockDate">January 1, 2023</div>
     </div>
   </div>
+
+  <!-- TRUST THE TEMPLE banner under header -->
+  <div id="trustTempleBanner">JUST TRUST THE TEMPLE</div>
   
   <!-- "Who Am I" section -->
   <div id="topBoxContainer">
@@ -45,7 +64,7 @@
   </div>
   
   <!-- Floating "HELLO WORLD" quote in the space below "Who Am I" -->
-  <div id="helloFloating">"HELLO WORLD"</div>
+  <div id="helloWorldsContainer"></div>
   <div id="topLine" class="line"></div>
 <div id="bottomLine" class="line"></div>
   
@@ -57,11 +76,11 @@
         <div class="content-box"><p>My personal goals are goals that are very important to me. Goals can range from the average human goal, including being the richest in the family. Things like that aren't realistic if you're not doing things like making your own Trust Temple like I am. Click the goals button above to embark on my psychological goal process and listings.</p></div>
       </div>
       <div class="section-box">
-        <div class="title-box"><h3>Inspiration's!</h3></div>
+        <div class="title-box" onclick="window.location.href='inspirations.html'" style="cursor: pointer;"><h3>Inspiration's!</h3></div>
         <div class="content-box"><p>One of my greatest inspirations would be Terry A. Davis and Ricky A. Kasso. To find out more information about these individuals followed by my reasons for being my inspirations, click the button above.</p></div>
       </div>
       <div class="section-box">
-        <div class="title-box"><h3>Guide's!</h3></div>
+        <div class="title-box" onclick="window.location.href='guides.html'" style="cursor: pointer;"><h3>Guide's!</h3></div>
         <div class="content-box"><p>Guides are made by personal reflection for your advantage, but this will only reside to people that are followers of my personal beliefs about life and other systems.</p></div>
       </div>
       <!-- Grouped N/A boxes below with gap -->
@@ -129,17 +148,35 @@
     }
   };
 
-  // Cursor reactive movement for "HELLO WORLD" quote
-  const helloDiv = document.getElementById('helloFloating');
-  document.addEventListener('mousemove', (e) => {
-    const rect = helloDiv.getBoundingClientRect();
-    const centerX = rect.left + rect.width/2;
-    const centerY = rect.top + rect.height/2;
-    const dx = e.clientX - centerX;
-    const dy = e.clientY - centerY;
-    const moveX = dx * 0.005; // smaller scale for subtle movement
-    const moveY = dy * 0.005;
-    helloDiv.style.transform = `translateX(-50%) translateX(${moveX}px) translateY(${moveY}px)`;
+  // Animated "HELLO WORLD" airport display effect
+  const helloWorldsContainer = document.getElementById('helloWorldsContainer');
+  function createHelloWorld() {
+    const div = document.createElement('div');
+    div.className = 'helloWorldAnimated';
+    div.textContent = '"HELLO WORLD"';
+    // Always center vertically between the lines
+    const topLine = document.getElementById('topLine');
+    const bottomLine = document.getElementById('bottomLine');
+    const top = (topLine.offsetTop + bottomLine.offsetTop) / 2 - 18; // 18px is half the text height
+    div.style.top = `${top}px`;
+    div.style.left = `-300px`;
+    helloWorldsContainer.appendChild(div);
+    // Animate across the screen
+    setTimeout(() => {
+      div.style.transform = `translateX(${window.innerWidth + 400}px)`;
+    }, 10);
+    // Remove after animation
+    setTimeout(() => {
+      helloWorldsContainer.removeChild(div);
+    }, 9000);
+  }
+  // Launch a new hello world every 2-4 seconds, with some randomness
+  function launchHelloWorlds() {
+    createHelloWorld();
+    setTimeout(launchHelloWorlds, 2000 + Math.random() * 2000);
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(launchHelloWorlds, 1000);
   });
 
   // World Clock Functionality
